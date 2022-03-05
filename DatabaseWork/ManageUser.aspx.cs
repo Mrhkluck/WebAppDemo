@@ -27,6 +27,16 @@ namespace WebAppDemo.DatabaseWork
             {
                 FillGrid();
             }
+            if(Request.QueryString["name"] != null)
+            {
+                //Retrieving data from querystring
+                Response.Write("Welcome:"+ Request.QueryString["name"]);
+            }
+            else
+            {
+                //Server.Transfer("Login.aspx");
+                Response.Redirect("Login.aspx");
+            }
 
         }
 
@@ -72,7 +82,8 @@ namespace WebAppDemo.DatabaseWork
 
         }
 
-        protected async void btnUpdate_Click(object sender, EventArgs e)
+        // protected asyns void btnUpdate_Click(object sender, EventArgs e)
+        protected  void btnUpdate_Click(object sender, EventArgs e)
         {
             string updateQry = "update user_master set " +
                 "username=@uname,fullname=@name,mobile=@mobile where user_id=@id";
@@ -89,16 +100,23 @@ namespace WebAppDemo.DatabaseWork
                 new SqlParameter("@name",txtName.Text),
                 new SqlParameter("@mobile",txtMobile.Text)
             };
-            cmd.Parameters.AddRange(parameters);
-            await con.OpenAsync();//asynchronous open call
-            int res =await cmd.ExecuteNonQueryAsync(); //asynchronous ExecuteNonQuery call
-            if (res>0)
+            //cmd.Parameters.AddRange(parameters);
+            //await con.OpenAsync();//asynchronous open call
+            //int res =await cmd.ExecuteNonQueryAsync(); //asynchronous ExecuteNonQuery call
+            //if (res>0)
+            //{
+            //    Label1.Text = "User detail Updated Successfully";
+            //    FillGrid();
+            //}
+            //con.Close();
+
+           int res =  BusinessLogic.ExecuteQry(updateQry, parameters);
+            if (res > 0)
             {
                 Label1.Text = "User detail Updated Successfully";
-                FillGrid();
-            }
-            con.Close();
+                  FillGrid();
 
+            }
 
 
         }
